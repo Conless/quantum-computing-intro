@@ -4,7 +4,11 @@
 
 \usepackage{qcircuit}
 
-\usepackage[backref]{hyperref}
+\usepackage[backref, colorlinks,
+    linkcolor=black,
+    citecolor=blue,
+    urlcolor=magenta
+]{hyperref}
 
 \usepackage{amsmath, amsfonts, amssymb, amsthm, extarrows}
 
@@ -43,7 +47,7 @@
 \usepackage{changepage}
 
 \lstset{
-	basicstyle=\small\ttfamily,	% 基本样式
+	basicstyle=\ttfamily,	% 基本样式
 		keywordstyle=\color{blue}, % 关键词样式
 		commentstyle=\color{gray!50!black!50},   	% 注释样式
 		stringstyle=\rmfamily\slshape\color{red}, 	% 字符串样式
