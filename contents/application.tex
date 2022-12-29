@@ -2,14 +2,25 @@
 
 \subsection{背景与题目}
 
-在量子算法发明之初，以 Deutsch-Jozsa 为例的多种算法应用范围都相对局限，对于多数实际问题都无能为力或无法带来显著变化。但随着量子算法的逐步发展，许多经典计算机能解决的问题都能被量子计算机找到更优的方案。下面以上海交通大学 ACM 班 2022 级程序设计大作业的一道题\,\href{https://acm.sjtu.edu.cn/OnlineJudge/problem?problem_id=1754}{P1754 int2048-乘法速度测试} 为例，讲解量子算法的简单应用。
+在量子算法发明之初，以 Deutsch-Jozsa 为例的多种算法应用范围都相对局限，对于多数实际问题都无能为力或无法带来显著变化。但随着量子算法的逐步发展，许多经典计算机能解决的问题都能被量子计算机找到更优的方案。下面以上海交通大学 ACM 班 2022 级程序设计大作业的一道题\ \href{https://acm.sjtu.edu.cn/OnlineJudge/problem?problem_id=1754}{P1754 int2048-乘法速度测试} 为例，讲解量子算法的简单应用。
+
+题目的大意为：给定若干个大整数，求它们的乘积，所有运算结果范围在 $[1,10^{200000}]$ 内。为简化题意，题目可以改写为，给定正整数 $a,b$ 满足 $a,b\le 10^{100000}$，求 $a\times b$。一种朴素的做法是直接模拟竖式乘法，其时间复杂度为 $n^2$（其中 $N=\lceil\log_k\max{a,b}\rceil$，$k$ 为运算过程中的进制）。进一步地，可以考虑整数的多项式表示：对于一个 $k$ 进制整数 \begin{align*}
+    a=\overline{a_1\cdots a_N}=\sum_{i\in[N]}a_i k^{N-i}
+\end{align*}
+考虑多项式 \begin{align*}
+    A(z)=\sum_{i\in[N]}a_i z^{N-i}
+\end{align*}
+同理可构造出 $b$ 对应的多项式 $B(z)$，那么令 \begin{align*}
+    C(z)=A(z)B(z)=\sum_{i\in[2N]}\left(\sum_{j\in[i]}a_jb_{i-j}\right)z^i
+\end{align*}
+在经典计算机中，利用快速傅里叶变换（Fast Fourier Transform）与其逆变换可以在 $O(N\log N)$ 的时间内求出对应的多项式 $C$\cite{cooley1965algorithm}，进行进位就得到了 $a\times b$。接下来，尝试使用量子计算机得到一种更加高效的做法。
 
 \subsection{前置知识}
 
-在离散傅里叶变换（Discrete Fourier Transform，DFT）中，我们熟知求多项式 $f(x)$ 进行点值 $(\omega_N^k,y_k)$ 求值的方法 \begin{align*}
+在离散傅里叶变换（Discrete Fourier Transform，DFT）中，我们熟知对多项式 $f(x)$ 进行点值 $(\omega_N^k,y_k)$ 求值的方法 \begin{align*}
     y_k=\frac{1}{\sqrt{N}}\sum_{j=0}^{N-1}x_j\omega_N^{jk}.
 \end{align*}
-在经典计算机中，可以通过分治加速的方式将这一过程（快速傅里叶变换，Fast Fourier Transform）的时间复杂度优化为 $O(n\log n)$\cite{cooley1965algorithm}。在量子计算机中，我们同样希望进行相同的变换，使得 $N-1$ 维量子态 $\ket{X}=\sum_{j=0}^{N-1}x_j\ket{j}$，经过变换得到 $\ket{Y}=\sum_{k=0}^{N-1}y_k\ket{k}$，其中 $y_k$ 与 $x_k$ 的关系满足上式，$\ket{j},\ket{k}$ 表示其二进制分解所得结果的张量积。代入可得 \begin{align*}
+在量子计算机中，我们同样希望进行相同的变换，使得 $N-1$ 维量子态 $\ket{X}=\sum_{j=0}^{N-1}x_j\ket{j}$，经过变换得到 $\ket{Y}=\sum_{k=0}^{N-1}y_k\ket{k}$，其中 $y_k$ 与 $x_k$ 的关系满足上式，$\ket{j},\ket{k}$ 表示其二进制分解所得结果的张量积。代入可得 \begin{align*}
     \ket{Y}=\sum_{k=0}^{N-1}y_k\ket{k}=\sum_{k=0}^{N-1}\left(\frac{1}{\sqrt{N}}\sum_{j=0}^{N-1}x_j\omega_N^{jk}\ket{k}\right)=\sum_{j=0}^{N-1}x_j\left(\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}\omega_N^{jk}\ket{k}\right)
 \end{align*}
 对比 $\ket{X},\ket{Y}$ 的形式，发现变换的实质就是一次基变换 \begin{align}\begin{aligned}
@@ -43,32 +54,57 @@
 那么式 \ref{eq:qft} 就可以写作 \begin{align*}
     2^{-\frac{n}{2}}\bigotimes_{l\in[n]}\left(\ket{0}+\exp(2\pi\mathrm{i}\overline{0.j_{n-l+1}\cdots j_{n}})\ket{1}\right)
 \end{align*}
-这种张量积意义下的量子电路就可以直接通过旋转门 $R_k$ 生成，\begin{align*}
+
+这种张量积意义下的量子电路就可以通过旋转门 $R_k$ 加以控制生成，\begin{align*}
     R_k=\begin{bmatrix}
             1 & 0                                           \\
             0 & \exp\left(\frac{2\pi\mathrm{i}}{2^k}\right)
         \end{bmatrix}
 \end{align*}
-例如，考虑输入态 $\ket{j_1,\cdots,j_n}$，由于 $\ket{0}=\ket{+},\ket{1}=\ket{-}$，将其首位通过 $H$ 门将得到 \begin{align*}
+特殊地，$H$ 可以直接看作自身受控的 $R_1$ 门，这是因为 $H\ket{0}=\ket{+},H\ket{1}=\ket{-}$
+
+例如，考虑输入态 $\ket{j_1,\cdots,j_n}$，将其首位通过 $H$ 门将得到 \begin{align*}
     \frac{1}{\sqrt{2}}\left(\ket{0}+\exp(2\pi\mathrm{i}\overline{0.j_1})\ket{1}\right)\ket{j_2,\cdots,j_n}
 \end{align*}
-随后，每次让首位通过受 $j_k$ 控的 $R_k$ 门，相位都将增加 $\frac{k\pi}{2^{k-1}}$，最终显然会得到 \begin{align*}
+随后，每次让首位通过受 $j_k$ 控的 $R_k$ 门，相位都将增加 $\frac{j_k\pi}{2^{k-1}}$，最终显然会得到 \begin{align*}
     \frac{1}{\sqrt{2}}\left(\ket{0}+\exp(2\pi\mathrm{i}\overline{0.j_1\cdots j_n})\ket{1}\right)\ket{j_2,\cdots,j_n}
 \end{align*}
-依此类推，每一位需要的状态都可以这样进行制备，这样就得到了量子电路\footnote{引用了 Michael Charemza 的 \LaTeX 代码 \cite{charemza2006examples}。}
+依此类推，每一位需要的状态都可以这样进行制备，这样就得到了量子电路\footnote{参考了 Michael Charemza 的 \LaTeX 代码 \cite{charemza2006examples}。}
+
 \begin{figure}[H]
     \centering
     \begin{minipage}{12cm}
         \centering
-        \Qcircuit @C=1em @R=2em {
+        \Qcircuit @C=1em @R=1em {
         % \begin{bmatrix}
-            \lstick{\ket{j_{n}}}   & \gate{H} & \gate{\hbox{$R_2$}} & \gate{\hbox{$R_3$}} & \qw    & \gate{\hbox{$R_n$}} & \qw      & \qw                 & \qw    & \qw                 & \qw      & \qw                 & \qw    & \qw                 & \qw      & \rstick{\ket{y_1}} \qw   \\
-            \lstick{\ket{j_{n-1}}} & \qw      & \ctrl{-1}           & \qw                 & \qw    & \qw                 & \gate{H} & \gate{\hbox{$R_3$}} & \qw    & \gate{\hbox{$R_n$}} & \qw      & \qw                 & \qw    & \qw                 & \qw      & \rstick{\ket{y_2}} \qw   \\
-            \lstick{\ket{j_{n-2}}} & \qw      & \qw                 & \ctrl{-2}           & \qw    & \qw                 & \qw      & \ctrl{-1}           & \qw    & \qw                 & \gate{H} & \gate{\hbox{$R_4$}} & \qw    & \gate{\hbox{$R_n$}} & \qw      & \rstick{\ket{y_3}} \qw   \\
-            \lstick{\vdots }       &          &                     &                     & \ddots &                     &          &                     & \ddots &                     &          &                     & \ddots &                     &          & \rstick{\vdots }         \\
-            \lstick{\ket{j_{1}}}   & \qw      & \qw                 & \qw                 & \qw    & \ctrl{-4}           & \qw      & \qw                 & \qw    & \ctrl{-3}           & \qw      & \ctrl{-2}           & \qw    & \ctrl{-2}           & \gate{H} & \rstick{\ket{y_{n}}} \qw
+            \lstick{\ket{j_{n}}}   & \gate{\hbox{$H$}} & \gate{\hbox{$R_2$}} & \gate{\hbox{$R_3$}} & \qw    & \gate{\hbox{$R_n$}} & \qw               & \qw                 & \qw    & \qw                     & \qw               & \qw                 & \qw    & \qw                     & \qw               & \rstick{\ket{y_1}} \qw   \\
+            \lstick{\ket{j_{n-1}}} & \qw               & \ctrl{-1}           & \qw                 & \qw    & \qw                 & \gate{\hbox{$H$}} & \gate{\hbox{$R_2$}} & \qw    & \gate{\hbox{$R_{n-1}$}} & \qw               & \qw                 & \qw    & \qw                     & \qw               & \rstick{\ket{y_2}} \qw   \\
+            \lstick{\ket{j_{n-2}}} & \qw               & \qw                 & \ctrl{-2}           & \qw    & \qw                 & \qw               & \ctrl{-1}           & \qw    & \qw                     & \gate{\hbox{$H$}} & \gate{\hbox{$R_2$}} & \qw    & \gate{\hbox{$R_{n-2}$}} & \qw               & \rstick{\ket{y_3}} \qw   \\
+            \lstick{\vdots }       &                   &                     &                     & \ddots &                     &                   &                     & \ddots &                         &                   &                     & \ddots &                         &                   & \rstick{\vdots }         \\
+            \lstick{\ket{j_{1}}}   & \qw               & \qw                 & \qw                 & \qw    & \ctrl{-4}           & \qw               & \qw                 & \qw    & \ctrl{-3}               & \qw               & \ctrl{-2}           & \qw    & \ctrl{-2}               & \gate{\hbox{$H$}} & \rstick{\ket{y_{n}}} \qw
         % \end{bmatrix}
         }
     \end{minipage}
     \label{fig:qft-circuit}
 \end{figure}
+
+于是，这样就可以完成量子傅里叶变换，将两个乘数的傅里叶变换点值相乘，就得到了积的多项式点值，进而可以利用量子运算可逆的性质方便地进行量子傅里叶逆变换，只需要将刚刚的操作完全反转即可，其电路为
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{12cm}
+        \centering
+        \Qcircuit @C=0.6em @R=1em {
+        % \begin{bmatrix}
+            \lstick{\ket{j_{n}}}   & \qw                           & \qw                                       & \qw     & \qw                                   & \qw                           & \qw                                       & \qw     & \qw                                   & \qw                           & \gate{\hbox{\scriptsize$(R_n)^{-1}$}} & \gate{\hbox{\scriptsize$(R_{n-1})^{-1}$}} & \qw     & \gate{\hbox{\scriptsize$(R_2)^{-1}$}} & \gate{\hbox{\scriptsize $H$}} & \rstick{\ket{y_1}} \qw   \\
+            \lstick{\ket{j_{n-1}}} & \qw                           & \qw                                       & \qw     & \qw                                   & \qw                           & \gate{\hbox{\scriptsize$(R_{n-1})^{-1}$}} & \qw     & \gate{\hbox{\scriptsize$(R_2)^{-1}$}} & \gate{\hbox{\scriptsize $H$}} & \qw                                   & \qw                                       & \qw     & \qw                                   & \qw                           & \rstick{\ket{y_2}} \qw   \\
+            \lstick{\ket{j_{n-2}}} & \qw                           & \gate{\hbox{\scriptsize$(R_{n-2})^{-1}$}} & \qw     & \gate{\hbox{\scriptsize$(R_2)^{-1}$}} & \gate{\hbox{\scriptsize $H$}} & \qw                                       & \qw     & \qw                                   & \qw                           & \qw                                   & \qw                                       & \qw     & \qw                                   & \qw                           & \rstick{\ket{y_3}} \qw   \\
+            \lstick{\vdots }       &                               &                                           & \iddots &                                       &                               &                                           & \iddots &                                       &                               &                                       &                                           & \iddots &                                       &                               & \rstick{\vdots }         \\
+            \lstick{\ket{j_{1}}}   & \gate{\hbox{\scriptsize $H$}} & \ctrl{-2}                                 & \qw     & \ctrl{-2}                             & \qw                           & \ctrl{-3}                                 & \qw     & \ctrl{-3}                             & \qw                           & \ctrl{-4}                             & \ctrl{-4}                                 & \qw     & \qw                                   & \qw                           & \rstick{\ket{y_{n}}} \qw
+        % \end{bmatrix}
+        }
+    \end{minipage}
+    \label{fig:qft-circuit}
+\end{figure}
+
+在此不再列出其电路。在每一个过程中，用到了 $\frac{n(n+1)}{2}$ 个量子门，时间复杂度为 $O(n^2)=O(\log^2 N)$，算法效率较经典计算机中的快速傅里叶变换有了显著的提升。利用 IBM 的 Python 宏包 Qiskit 可以在 Jupyter Notebook 中完成这样的量子乘法器，笔者的代码\footnote{参考了 qiskit-tutorials 中的实现代码\cite{Qiskit}。}在 \href{https://github.com/Conless/quantum-computing-intro/blob/main/src/qft.ipynb}{GitHub} 开源。
