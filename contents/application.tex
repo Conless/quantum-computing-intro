@@ -104,7 +104,7 @@
         % \end{bmatrix}
         }
     \end{minipage}
-    \label{fig:qft-circuit}
+    \label{fig:iqft-circuit}
 \end{figure}
 
 在此不再列出其电路。在每一个过程中，用到了 $\frac{n(n+1)}{2}$ 个量子门，时间复杂度为 $O(n^2)=O(\log^2 N)$，算法效率较经典计算机中的快速傅里叶变换有了显著的提升。利用 IBM 的 Python 宏包 Qiskit 可以在 Jupyter Notebook 中完成这样的量子乘法器，笔者的代码\footnote{参考了 qiskit-tutorials 中的实现代码\cite{Qiskit}。}在 \href{https://github.com/Conless/quantum-computing-intro/blob/main/src/qft.ipynb}{GitHub} 开源。
