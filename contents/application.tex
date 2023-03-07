@@ -24,7 +24,7 @@
     \ket{Y}=\sum_{k=0}^{N-1}y_k\ket{k}=\sum_{k=0}^{N-1}\left(\frac{1}{\sqrt{N}}\sum_{j=0}^{N-1}x_j\omega_N^{jk}\ket{k}\right)=\sum_{j=0}^{N-1}x_j\left(\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}\omega_N^{jk}\ket{k}\right)
 \end{align}
 对比 $\ket{X},\ket{Y}$ 的形式，发现变换的实质就是一次基变换 \begin{align}
-        \ket{j}\to\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}w_N^{jk}\ket{k}\label{eq:qft-change-basis}
+        \ket{j}\to\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}\omega_N^{jk}\ket{k}\label{eq:qft-change-basis}
     \end{align}
 两组标准正交基的变换可改写为酉变换 \begin{align}
     U_{\text{QFT}} = \frac{1}{\sqrt{N}}
@@ -42,7 +42,7 @@
 \subsection{电路设计}
 
 上面的内容已经完成了量子傅里叶变换的算法设计，但得到了这样的酉阵，还不能直接设计出所需的量子电路，因此，在这里将式 \ref{eq:qft-change-basis} 进行进一步演化：考虑直接对 $\omega_{2^n}^{jk}=\exp(\frac{2\pi\mathrm{i} jk}{2^n})$ 指数中的 $\frac{k}{2^n}$ 进行二进制小数分解，也即对 $k$ 进行二进制分解，得到 \begin{align}\begin{aligned}
-        \ket{j}\to\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}w_N^{jk}\ket{k}
+        \ket{j}\to\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}\omega_N^{jk}\ket{k}
          & =2^{-\frac{n}{2}}\sum_{l\in[n],k_l\in\{0,1\}}\exp\left(2\pi\mathrm{i} j\sum_{l\in[n]}k_l2^{-l}\right)\ket{k_1,\cdots,k_n}                  \\
          & =2^{-\frac{n}{2}}\bigotimes_{l\in[n]}\left(\sum_{k_l\in[0,1]}\exp(2\pi\mathrm{i} jk_l2^{-l})\ket{k_l}\right)                               \\
          & =2^{-\frac{n}{2}}\bigotimes_{l\in[n]}\left(\ket{0}+\exp(2\pi\mathrm{i} j2^{-l})\ket{1}\right)                                              \\
