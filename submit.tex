@@ -47,7 +47,7 @@
 {\small \textit{上海交通大学致远学院2022级，上海 201100}}\\[6pt]
 论文是否发表：否\\[2pt]
 }
-\date{}%%方括号中的内容只是起到占位作用。请在使用模板时将它们（连同方括号本身）替换为论文的实际内容。
+\date{2022 年 12 月 29 日}%%方括号中的内容只是起到占位作用。请在使用模板时将它们（连同方括号本身）替换为论文的实际内容。
 \fancypagestyle{firststyle}
 {
    \fancyhf{}
@@ -60,7 +60,7 @@
 
 \fancyhead[LE,RO]{\thepage}
 \fancyhead[CE]{南京大学第26届基础学科论坛}
-\fancyhead[RE]{课程论文}
+\fancyhead[RE]{计算机}
 \fancyhead[CO]{潘屹\quad 量子计算：简介、应用与前景}
 \fancyhead[LO]{}
 
@@ -76,10 +76,10 @@
 \setlength{\textwidth}{15.50cm}
 \vspace{-.8cm}
 \begin{center}
-\parbox{\textwidth}{
-\textbf{摘要} \quad {量子计算是基于量子力学理论的全新计算方式，相比起经典计算机的计算模式，量子计算在应对一些特定问题时能带来较大的效率提升。笔者在计算机科学的伟大思想这门课程（CS1950@SJTU）中了解到了基础的量子计算知识，对这一领域产生好奇与兴趣，在课后阅读了量子计算相关材料、书籍，学习量子计算课程（CS294-2@UCBerkeley）的课堂笔记；对量子计算的发展、理论与应用有了初步的认知。本文对当前量子计算的基础理论进行科普性概述，介绍了一些简单的量子算法与应用，并展望量子计算的前景。所有源代码在 \href{https://github.com/Conless/quantum-computing-intro}{https://github.com/Conless/quantum-computing-intro} 开源。} \\
+    \parbox{\textwidth}{
+        \textbf{摘要} \quad {量子计算是基于量子力学理论的全新计算方式，相比起经典计算机的计算模式，量子计算在应对一些特定问题时能带来较大的效率提升。笔者在计算机科学的伟大思想这门课程（CS1950@SJTU）中了解到了基础的量子计算知识，对这一领域产生好奇与兴趣，在课后阅读了量子计算相关材料、书籍，学习量子计算课程（CS294-2@UCBerkeley）的课堂笔记；对量子计算的发展、理论与应用有了初步的认知。本文对当前量子计算的基础理论进行科普性概述，介绍了一些简单的量子算法与应用，并展望量子计算的前景。所有源代码在 \href{https://github.com/Conless/quantum-computing-intro}{https://github.com/Conless/quantum-computing-intro} 开源。} \\
 
-\textbf{关键词}\quad {量子计算；量子算法}}
+        \textbf{关键词}\quad {量子计算；量子算法}}
 \end{center}
 
 \setcounter{page}{1}
@@ -88,8 +88,10 @@
 \setlength{\evensidemargin}{\oddsidemargin}
 \setlength{\textwidth}{17.00cm}
 
-% \section*{[论文创新性]}
-% [这是样例文字。这是样例文字。这是样例文字。这是样例文字。这是样例文字。这是样例文字。这是样例文字。这是样例文字。这是样例文字。这是样例文字。这是样例文字。]
+\section*{[论文创新性]}
+本论文从本科一年级学生的角度出发，介绍了学习量子计算过程中的收获与心得体会，并将量子
+算法应用于程序设计基础课程的题目中，提供了新的视角。
+
 \section*{[引言]}
 
 量子计算，指一种运用量子力学现象，例如量子叠加、量子干涉与量子纠缠进行计算的方式，是过去的数十年中兴起的一种全新计算方式，在近几年中也是一个在各类科普中高频出现的热点词汇。下面的内容从经典计算机讲起，简要地介绍量子计算的发展历史与其重要意义\footnote{部分内容参考了维基百科词条与 \textit{Quantum Computation and Quantum Information}\cite{nielsen2002quantum}}。
@@ -172,17 +174,17 @@
 每一个量子比特都可以由一个特定维度的单位向量表示，而量子比特之间的运算同样可以用向量变换的手段，即矩阵，进行刻画。值得注意的是，根据 von Neumann 提出的量子力学公设\cite{von2018mathematical}，量子比特之间的运算必须是酉变换（unitary transformation），也即，两个沿时间先后顺序出现的量子比特 $\ket{\psi},\ket{\psi'}$ 满足 $\ket{\psi'}=U\,\ket{\psi}$，其中变换矩阵 $U$ 满足其共轭转置与自身的乘积 $U^\dagger U=I$。根据线性代数知识，这蕴含了 $U^\dagger=U=U^{-1}$。在此基础上，我们可以构建出几个常用的合法量子运算门
 
 定义矩阵 $X$ 表示非门 \begin{align}
-        X=\begin{bmatrix}
-              0 & 1 \\
-              1 & 0
-          \end{bmatrix},\qquad
-        \begin{bmatrix}
-            \alpha \\\beta
-        \end{bmatrix}\mapsto
-        \begin{bmatrix}
-            \beta \\\alpha
-        \end{bmatrix}.
-    \end{align}
+    X=\begin{bmatrix}
+          0 & 1 \\
+          1 & 0
+      \end{bmatrix},\qquad
+    \begin{bmatrix}
+        \alpha \\\beta
+    \end{bmatrix}\mapsto
+    \begin{bmatrix}
+        \beta \\\alpha
+    \end{bmatrix}.
+\end{align}
 显然地，这表示将单量子比特的两位相互交换。这与传统非门是相似的。
 
 定义矩阵 $Z,U$ 表示相位翻转和旋转 \begin{align}
@@ -209,24 +211,24 @@
 \end{align}
 
 定义矩阵 $H$ 表示 Hadamard 门 \begin{align}
-        H=\frac{1}{\sqrt{2}}\begin{bmatrix}
-                                1 & 1  \\
-                                1 & -1
-                            \end{bmatrix},\qquad
-        \begin{bmatrix}
-            \cos\alpha \\
-            \sin\alpha
-        \end{bmatrix}\mapsto
-        \begin{bmatrix}
-            \cos(\frac{\pi}{4}-\alpha) \\
-            \sin(\frac{\pi}{4}-\alpha)
-        \end{bmatrix}
-        \label{eq:hadamard}
-    \end{align}
+    H=\frac{1}{\sqrt{2}}\begin{bmatrix}
+                            1 & 1  \\
+                            1 & -1
+                        \end{bmatrix},\qquad
+    \begin{bmatrix}
+        \cos\alpha \\
+        \sin\alpha
+    \end{bmatrix}\mapsto
+    \begin{bmatrix}
+        \cos(\frac{\pi}{4}-\alpha) \\
+        \sin(\frac{\pi}{4}-\alpha)
+    \end{bmatrix}
+    \label{eq:hadamard}
+\end{align}
 这代表着将一个在 $\mathbb{R}^2$ 的向量沿 $\theta=\frac{\pi}{8}$ 进行对称。于是 \begin{align}\begin{aligned}
-    H\ket{0}&=\frac{\ket{0}+\ket{1}}{\sqrt{2}}=\ket{+}, \\
-    H\ket{1}&=\frac{\ket{0}-\ket{1}}{\sqrt{2}}=\ket{-}
-\end{aligned}\end{align}
+        H\ket{0} & =\frac{\ket{0}+\ket{1}}{\sqrt{2}}=\ket{+}, \\
+        H\ket{1} & =\frac{\ket{0}-\ket{1}}{\sqrt{2}}=\ket{-}
+    \end{aligned}\end{align}
 这两个向量分别对应了 $\pm\frac{\pi}{4}$，前者位于 $\ket{0},\ket{1}$ 的角平分线上，代表了两者的等概率叠加。因此，Hadamard 门在实际运算中常用于制备叠加态，例如，若需要 $n$ 个量子比特的等概率叠加，即 $\ket{+} $ 的 $n$ 维张量积 \begin{align}
     \ket{+}^{\tensor n}=\underbrace{\ket{+}\tensor\cdots\tensor\ket{+}}_{\text{$n$ 个 $\ket{+}$}}
 \end{align}
@@ -443,8 +445,8 @@ Desutsch-Jozsa 算法可由一个简单的游戏进行引入：Alice 从 $0-2^{n
     \ket{Y}=\sum_{k=0}^{N-1}y_k\ket{k}=\sum_{k=0}^{N-1}\left(\frac{1}{\sqrt{N}}\sum_{j=0}^{N-1}x_j\omega_N^{jk}\ket{k}\right)=\sum_{j=0}^{N-1}x_j\left(\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}\omega_N^{jk}\ket{k}\right)
 \end{align}
 对比 $\ket{X},\ket{Y}$ 的形式，发现变换的实质就是一次基变换 \begin{align}
-        \ket{j}\to\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}\omega_N^{jk}\ket{k}\label{eq:qft-change-basis}
-    \end{align}
+    \ket{j}\to\frac{1}{\sqrt{N}}\sum_{k=0}^{N-1}\omega_N^{jk}\ket{k}\label{eq:qft-change-basis}
+\end{align}
 两组标准正交基的变换可改写为酉变换 \begin{align}
     U_{\text{QFT}} = \frac{1}{\sqrt{N}}
     \begin{bmatrix}
@@ -496,11 +498,11 @@ Desutsch-Jozsa 算法可由一个简单的游戏进行引入：Alice 从 $0-2^{n
         \centering
         \Qcircuit @C=1em @R=1em {
         % \begin{bmatrix}
-            \lstick{\ket{j_{n}}}   & \gate{\hbox{$H$}} & \gate{\hbox{$R_2$}} & \gate{\hbox{$R_3$}} & \qw    & \gate{\hbox{$R_n$}} & \qw               & \qw                 & \qw    & \qw                     & \qw               & \qw                 & \qw    & \qw                     & \qw               & \rstick{\ket{y_1}} \qw   \\
-            \lstick{\ket{j_{n-1}}} & \qw               & \ctrl{-1}           & \qw                 & \qw    & \qw                 & \gate{\hbox{$H$}} & \gate{\hbox{$R_2$}} & \qw    & \gate{\hbox{$R_{n-1}$}} & \qw               & \qw                 & \qw    & \qw                     & \qw               & \rstick{\ket{y_2}} \qw   \\
-            \lstick{\ket{j_{n-2}}} & \qw               & \qw                 & \ctrl{-2}           & \qw    & \qw                 & \qw               & \ctrl{-1}           & \qw    & \qw                     & \gate{\hbox{$H$}} & \gate{\hbox{$R_2$}} & \qw    & \gate{\hbox{$R_{n-2}$}} & \qw               & \rstick{\ket{y_3}} \qw   \\
-            \lstick{\vdots }       &                   &                     &                     & \ddots &                     &                   &                     & \ddots &                         &                   &                     & \ddots &                         &                   & \rstick{\vdots }         \\
-            \lstick{\ket{j_{1}}}   & \qw               & \qw                 & \qw                 & \qw    & \ctrl{-4}           & \qw               & \qw                 & \qw    & \ctrl{-3}               & \qw               & \ctrl{-2}           & \qw    & \ctrl{-2}               & \gate{\hbox{$H$}} & \rstick{\ket{y_{n}}} \qw
+        \lstick{\ket{j_{n}}}   & \gate{\hbox{$H$}} & \gate{\hbox{$R_2$}} & \gate{\hbox{$R_3$}} & \qw    & \gate{\hbox{$R_n$}} & \qw               & \qw                 & \qw    & \qw                     & \qw               & \qw                 & \qw    & \qw                     & \qw               & \rstick{\ket{y_1}} \qw   \\
+        \lstick{\ket{j_{n-1}}} & \qw               & \ctrl{-1}           & \qw                 & \qw    & \qw                 & \gate{\hbox{$H$}} & \gate{\hbox{$R_2$}} & \qw    & \gate{\hbox{$R_{n-1}$}} & \qw               & \qw                 & \qw    & \qw                     & \qw               & \rstick{\ket{y_2}} \qw   \\
+        \lstick{\ket{j_{n-2}}} & \qw               & \qw                 & \ctrl{-2}           & \qw    & \qw                 & \qw               & \ctrl{-1}           & \qw    & \qw                     & \gate{\hbox{$H$}} & \gate{\hbox{$R_2$}} & \qw    & \gate{\hbox{$R_{n-2}$}} & \qw               & \rstick{\ket{y_3}} \qw   \\
+        \lstick{\vdots }       &                   &                     &                     & \ddots &                     &                   &                     & \ddots &                         &                   &                     & \ddots &                         &                   & \rstick{\vdots }         \\
+        \lstick{\ket{j_{1}}}   & \qw               & \qw                 & \qw                 & \qw    & \ctrl{-4}           & \qw               & \qw                 & \qw    & \ctrl{-3}               & \qw               & \ctrl{-2}           & \qw    & \ctrl{-2}               & \gate{\hbox{$H$}} & \rstick{\ket{y_{n}}} \qw
         % \end{bmatrix}
         }
     \end{minipage}
@@ -515,18 +517,18 @@ Desutsch-Jozsa 算法可由一个简单的游戏进行引入：Alice 从 $0-2^{n
         \centering
         \Qcircuit @C=0.6em @R=1em {
         % \begin{bmatrix}
-            \lstick{\ket{j_{n}}}   & \qw                           & \qw                                       & \qw     & \qw                                   & \qw                           & \qw                                       & \qw     & \qw                                   & \qw                           & \gate{\hbox{\scriptsize$(R_n)^{-1}$}} & \gate{\hbox{\scriptsize$(R_{n-1})^{-1}$}} & \qw     & \gate{\hbox{\scriptsize$(R_2)^{-1}$}} & \gate{\hbox{\scriptsize $H$}} & \rstick{\ket{y_1}} \qw   \\
-            \lstick{\ket{j_{n-1}}} & \qw                           & \qw                                       & \qw     & \qw                                   & \qw                           & \gate{\hbox{\scriptsize$(R_{n-1})^{-1}$}} & \qw     & \gate{\hbox{\scriptsize$(R_2)^{-1}$}} & \gate{\hbox{\scriptsize $H$}} & \qw                                   & \qw                                       & \qw     & \qw                                   & \qw                           & \rstick{\ket{y_2}} \qw   \\
-            \lstick{\ket{j_{n-2}}} & \qw                           & \gate{\hbox{\scriptsize$(R_{n-2})^{-1}$}} & \qw     & \gate{\hbox{\scriptsize$(R_2)^{-1}$}} & \gate{\hbox{\scriptsize $H$}} & \qw                                       & \qw     & \qw                                   & \qw                           & \qw                                   & \qw                                       & \qw     & \qw                                   & \qw                           & \rstick{\ket{y_3}} \qw   \\
-            \lstick{\vdots }       &                               &                                           & \iddots &                                       &                               &                                           & \iddots &                                       &                               &                                       &                                           & \iddots &                                       &                               & \rstick{\vdots }         \\
-            \lstick{\ket{j_{1}}}   & \gate{\hbox{\scriptsize $H$}} & \ctrl{-2}                                 & \qw     & \ctrl{-2}                             & \qw                           & \ctrl{-3}                                 & \qw     & \ctrl{-3}                             & \qw                           & \ctrl{-4}                             & \ctrl{-4}                                 & \qw     & \qw                                   & \qw                           & \rstick{\ket{y_{n}}} \qw
+        \lstick{\ket{j_{n}}}   & \qw                           & \qw                                       & \qw     & \qw                                   & \qw                           & \qw                                       & \qw     & \qw                                   & \qw                           & \gate{\hbox{\scriptsize$(R_n)^{-1}$}} & \gate{\hbox{\scriptsize$(R_{n-1})^{-1}$}} & \qw     & \gate{\hbox{\scriptsize$(R_2)^{-1}$}} & \gate{\hbox{\scriptsize $H$}} & \rstick{\ket{y_1}} \qw   \\
+        \lstick{\ket{j_{n-1}}} & \qw                           & \qw                                       & \qw     & \qw                                   & \qw                           & \gate{\hbox{\scriptsize$(R_{n-1})^{-1}$}} & \qw     & \gate{\hbox{\scriptsize$(R_2)^{-1}$}} & \gate{\hbox{\scriptsize $H$}} & \qw                                   & \qw                                       & \qw     & \qw                                   & \qw                           & \rstick{\ket{y_2}} \qw   \\
+        \lstick{\ket{j_{n-2}}} & \qw                           & \gate{\hbox{\scriptsize$(R_{n-2})^{-1}$}} & \qw     & \gate{\hbox{\scriptsize$(R_2)^{-1}$}} & \gate{\hbox{\scriptsize $H$}} & \qw                                       & \qw     & \qw                                   & \qw                           & \qw                                   & \qw                                       & \qw     & \qw                                   & \qw                           & \rstick{\ket{y_3}} \qw   \\
+        \lstick{\vdots }       &                               &                                           & \iddots &                                       &                               &                                           & \iddots &                                       &                               &                                       &                                           & \iddots &                                       &                               & \rstick{\vdots }         \\
+        \lstick{\ket{j_{1}}}   & \gate{\hbox{\scriptsize $H$}} & \ctrl{-2}                                 & \qw     & \ctrl{-2}                             & \qw                           & \ctrl{-3}                                 & \qw     & \ctrl{-3}                             & \qw                           & \ctrl{-4}                             & \ctrl{-4}                                 & \qw     & \qw                                   & \qw                           & \rstick{\ket{y_{n}}} \qw
         % \end{bmatrix}
         }
     \end{minipage}
     \label{fig:iqft-circuit}
 \end{figure}
 
-在此不再列出其电路。在每一个过程中，用到了 $\frac{n(n+1)}{2}$ 个量子门，时间复杂度为 $O(n^2)=O(\log^2 N)$，算法效率较经典计算机中的快速傅里叶变换有了显著的提升。利用 IBM 的 Python 宏包 Qiskit 可以在 Jupyter Notebook 中完成这样的量子乘法器，笔者的代码\footnote{参考了 qiskit-tutorials 中的实现代码\cite{Qiskit}。}在 \href{https://github.com/Conless/quantum-computing-intro/blob/main/src/qft.ipynb}{GitHub} 开源。
+在此不再列出其电路。在每一个过程中，用到了 $\frac{n(n+1)}{2}$ 个量子门，时间复杂度为 $O(n^2)=O(\log^2 N)$，算法效率较经典计算机中的快速傅里叶变换有了显著的提升。利用 IBM 的 Python 宏包 Qiskit 可以在 Jupyter Notebook 中完成这样的量子乘法器，笔者的代码\footnote{参考了 qiskit-tutorials 中的实现代码\cite{Qiskit} 与 《20 行 Python 代码说清量子霸权》。}在 \href{https://github.com/Conless/quantum-computing-intro/blob/main/src/qft.ipynb}{GitHub} 开源。
 
 \section{思考与展望}
 
@@ -544,22 +546,30 @@ Desutsch-Jozsa 算法可由一个简单的游戏进行引入：Alice 从 $0-2^{n
 
 \newpage
 \begin{center}
-{\Large \textbf{Quantum Computing: Introduction, Application and Prospect}} \\ [0.5cm]
-{
-Conless Pan
-\\[2pt]
-{\small \textit{2022, Zhiyuan College, Shanghai Jiao Tong University, Shanghai 201100}}\\[6pt]
-}
-\thispagestyle{fancy}
-\setlength{\oddsidemargin}{ 1cm}
-\setlength{\evensidemargin}{\oddsidemargin}
-\setlength{\textwidth}{15.50cm}
-\vspace{0.5cm}
+    {\Large \textbf{Quantum Computing: Introduction, Application and Prospect}} \\ [0.5cm]
+    {
+    Conless Pan
+    \\[2pt]
+    {\small \textit{2022, Zhiyuan College, Shanghai Jiao Tong University, Shanghai 201100}}\\[6pt]
+    }
+    \thispagestyle{fancy}
+    \setlength{\oddsidemargin}{ 1cm}
+    \setlength{\evensidemargin}{\oddsidemargin}
+    \setlength{\textwidth}{15.50cm}
+    \vspace{0.5cm}
 
-\parbox{\textwidth}{
-\textbf{Abstract:}\quad {Quantum computing is a new computing paradigm based on the theory of quantum mechanics. Compared to the computing model of classical computers, quantum computing can bring significant efficiency improvements in dealing with specific problems. In the course The Great Ideas of Computer Science (CS1950@SJTU), I learned basic knowledge of quantum computing, getting curious and interested in this field, and read quantum computing related materials and books after class, as well as studying lecture notes from the course Quantum Computing (CS294-2@UCBerkeley). This has provided me with a preliminary understanding of the development, theory, and applications of quantum computing. This article provides a popular science overview of the basic theory of current quantum computing, introduces some simple quantum algorithms and applications, and looks forward to the prospects of quantum computing. All source code is open-sourced on GitHub.} \\
+    \parbox{\textwidth}{
+        \textbf{Abstract:}\quad {Quantum computing is a new computing method based on the theory of quantum
+            mechanics. Compared to the computing model of classical computers, quantum computing can
+            bring significant improvements in efficiency in certain problems. In the course Great Ideas of
+            Computer Science (CS1950@SJTU), my curiosity in quantum computing was triggered, motivating
+            me to further explore the field through related books and the online course Quantum Computing
+            (CS294-2@UCBerkeley), which equipped me with a preliminary understanding of the development,
+            theory, and applications of quantum computing. This article provides an overview of the basic theory
+            of quantum computing, introduces some simple quantum algorithms and applications, and shed light
+            on the prospects of quantum computing. All source code is open-sourced on GitHub.} \\
 
-\textbf{Key words:}\quad {Quantum Computing; Quantum Algorithm}}
+        \textbf{Key words:}\quad {Quantum Computing; Quantum Algorithm}}
 \end{center}
 
 \end{document}
