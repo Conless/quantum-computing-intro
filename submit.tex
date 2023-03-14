@@ -528,7 +528,7 @@ Desutsch-Jozsa 算法可由一个简单的游戏进行引入：Alice 从 $0-2^{n
     \label{fig:iqft-circuit}
 \end{figure}
 
-在此不再列出其电路。在每一个过程中，用到了 $\frac{n(n+1)}{2}$ 个量子门，时间复杂度为 $O(n^2)=O(\log^2 N)$，算法效率较经典计算机中的快速傅里叶变换有了显著的提升。利用 IBM 的 Python 宏包 Qiskit 可以在 Jupyter Notebook 中完成这样的量子乘法器，笔者的代码\footnote{参考了 qiskit-tutorials 中的实现代码\cite{Qiskit} 与 《20 行 Python 代码说清量子霸权》。}在 \href{https://github.com/Conless/quantum-computing-intro/blob/main/src/qft.ipynb}{GitHub} 开源。
+在此不再列出其电路。在每一个过程中，用到了 $\frac{n(n+1)}{2}$ 个量子门，时间复杂度为 $O(n^2)=O(\log^2 N)$，算法效率较经典计算机中的快速傅里叶变换有了显著的提升。利用 IBM 的 Python 宏包 Qiskit 可以在 Jupyter Notebook 中完成这样的量子乘法器，笔者的代码\footnote{参考了 qiskit-tutorials 中的实现代码\cite{Qiskit} 与 《20 行 Python 代码说清量子霸权》\cite{马超20行Python代码说清量子霸权}。}在 \href{https://github.com/Conless/quantum-computing-intro/blob/main/src/qft.ipynb}{GitHub} 开源。
 
 \section{思考与展望}
 
@@ -561,14 +561,13 @@ Desutsch-Jozsa 算法可由一个简单的游戏进行引入：Alice 从 $0-2^{n
     \parbox{\textwidth}{
         \textbf{Abstract:}\quad {Quantum computing is a new computing method based on the theory of quantum
             mechanics. Compared to the computing model of classical computers, quantum computing can
-            bring significant improvements in efficiency in certain problems. In the course Great Ideas of
+            bring significant improvements in efficiency under certain circumstances. In the course Great Ideas of
             Computer Science (CS1950@SJTU), my curiosity in quantum computing was triggered, motivating
             me to further explore the field through related books and the online course Quantum Computing
             (CS294-2@UCBerkeley), which equipped me with a preliminary understanding of the development,
             theory, and applications of quantum computing. This article provides an overview of the basic theory
             of quantum computing, introduces some simple quantum algorithms and applications, and shed light
             on the prospects of quantum computing. All source code is open-sourced on GitHub.} \\
-
         \textbf{Key words:}\quad {Quantum Computing; Quantum Algorithm}}
 \end{center}
 
